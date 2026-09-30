@@ -1,0 +1,12 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: python3 tools/generate_synthetic_sample.py --seed 42 --n 1000
+      - run: python3 tools/validate_dataset.py
+      - run: test -f README.md && test -f docs/ble-contract.md && test -f data/README.md
