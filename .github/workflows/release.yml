@@ -1,0 +1,20 @@
+name: release
+on:
+  push:
+    tags: ["v*"]
+permissions: { contents: write }
+jobs:
+  release-docs-sample:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: python3 tools/generate_synthetic_sample.py --seed 42 --n 1000
+      - run: python3 tools/validate_dataset.py
+      - run: zip -r docs-bundle.zip README.md docs data/README.md data/schema.json tools
+      - run: sha256sum docs-bundle.zip data/synthetic_sample/vitals_sample.csv > SHA256SUMS.txt
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: docs-bundle.zip\ndata/synthetic_sample/vitals_sample.csv\ndata/schema.json\nSHA256SUMS.txt
+          body: "Docs + SYNTHETIC sample only. No firmware.bin/APK in this repo — see docs/build-and-release.md."

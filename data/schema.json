@@ -1,0 +1,1 @@
+{"columns": ["ts", "hr", "spo2", "temp_body", "steps_cum", "env_temp", "humidity", "pressure", "air_quality", "battery", "fall_detected", "sos", "heat_stress", "dehydration", "label"], "description": "Synthetic-only sample mirroring BLE watch->phone schema. Not collected data.", "generator": "tools/generate_synthetic_sample.py", "seed": 42}
